@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 26
+/svn/!svn/ver/31/trunk/10M
+END
+part.tbl
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/31/trunk/10M/part.tbl
+END
+lineitem.tbl
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/31/trunk/10M/lineitem.tbl
+END
+nation.tbl
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/31/trunk/10M/nation.tbl
+END
+partsupp.tbl
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/31/trunk/10M/partsupp.tbl
+END
+orders.tbl
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/31/trunk/10M/orders.tbl
+END
+customer.tbl
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/31/trunk/10M/customer.tbl
+END
+region.tbl
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/31/trunk/10M/region.tbl
+END
+supplier.tbl
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/31/trunk/10M/supplier.tbl
+END

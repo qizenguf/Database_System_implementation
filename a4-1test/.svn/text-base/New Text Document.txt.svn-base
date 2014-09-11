@@ -1,0 +1,222 @@
+void Statistics::Read(char *fromWhere)
+{
+    FILE *fp;
+    fp=fopen(fromWhere,"rb");
+    if(fp)
+    {
+        char sign[charsize];
+        while(fgets(sign,charsize,fp))
+        {
+            if(sign[strlen(sign)-1]=='\n')
+            {
+                sign[strlen(sign)-1]='\0';
+            }
+            if(!strcmp(sign,"RT"))
+            {
+                int counter=0;
+                char rt[charsize];
+                string name;
+                double number;
+                string last;
+                while(fgets(rt,charsize,fp))
+                {
+                    if(rt[strlen(rt)-1]=='\n')
+                    {
+                        rt[strlen(rt)-1]='\0';
+                    }
+                    if(strcmp(rt,"RA"))
+                    {
+                        if(counter==0)
+                        {
+                            name=string(rt);
+                            counter=1;
+                        }else{
+                            number=*((double*)rt);
+                            relTuples->insert(pair<string,double>(name,number));
+                            counter=0;
+                        }
+                    }else{
+                        char ra[charsize];
+                        while(fgets(ra,10,fp))
+                        {
+                            if(ra[strlen(ra)-1]=='\n')
+                            {
+                                ra[strlen(ra)-1]='\0';
+                            }
+                            if(strcmp(ra,"AN"))
+                            {
+                                name=string(ra);
+                                list<string> *atts=new list<string>;
+                                char eric[charsize];
+                                while(fgets(eric,charsize,fp))
+                                {
+                                    if(eric[strlen(eric)-1]=='\n')
+                                    {
+                                        eric[strlen(eric)-1]='\0';
+                                    }
+                                    if(strcmp(eric,"ERICWU"))
+                                    {
+                                        string att=string(eric);
+                                        atts->push_back(att);
+                                    }else{
+                                        relAtts->insert(pair<string,list<string>*>(name,atts));
+                                        break;
+                                    }
+                                }
+                            }else{
+                                int counter=0;
+                                char an[charsize];
+                                while(fgets(an,charsize,fp))
+                                {
+                                    if(an[strlen(an)-1]=='\n')
+                                    {
+                                        an[strlen(an)-1]='\0';
+                                    }
+                                    if(strcmp(an,"AR"))
+                                    {
+                                        if(counter==0)
+                                        {
+                                            name=string(an);
+                                            counter=1;
+                                        }else{
+                                            number=*((double*)an);
+                                            attNumDis->insert(pair<string,double>(name,number));
+                                            counter=0;
+                                        }
+                                    }else{
+                                        int counter=0;
+                                        char ar[charsize];
+                                        while(fgets(ar,charsize,fp))
+                                        {
+                                            if(ar[strlen(ar)-1]=='\n')
+                                            {
+                                                ar[strlen(ar)-1]='\0';
+                                            }
+                                            if(strcmp(ar,"RP"))
+                                            {
+                                                if(counter==0)
+                                                {
+                                                    name=string(ar);
+                                                    counter=1;
+                                                }else{
+                                                    last=string(ar);
+                                                    attRel->insert(pair<string,string>(name,last));
+                                                    counter=0;
+                                                }
+                                            }else{
+                                                char rp[charsize];
+                                                list<string> *rels=new list<string>;
+                                                while(fgets(rp,charsize,fp))
+                                                {
+                                                    if(rp[strlen(rp)-1]=='\n')
+                                                    {
+                                                        rp[strlen(rp)-1]='\0';
+                                                    }
+                                                    if(strcmp(rp,"SilverMoon"))
+                                                    {
+                                                        string rel=string(rp);
+                                                        rels->push_back(rel);
+                                                    }else{
+                                                        relPart->push_back(rels);
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        fclose(fp);
+
+    }else{
+        cout<<"OPEN EMPTY FILE"<<endl;
+        //make the data empty
+    }
+}
+
+void Statistics::Write(char *fromWhere)
+{
+    FILE *fp;
+    fp=fopen(fromWhere,"wb");
+    if(fp)
+    {
+        char *rt="RT";
+        fwrite(rt,strlen(rt),1,fp);
+        fwrite("\n",sizeof(char),1,fp);
+
+        for(map<string,double>::iterator it1=relTuples->begin();it1!=relTuples->end();++it1)
+        {
+            fwrite(it1->first.c_str(),strlen(it1->first.c_str()),1,fp);
+            fwrite("\n",sizeof(char),1,fp);
+            fwrite(&(it1->second),sizeof(double),1,fp);
+            fwrite("\n",sizeof(char),1,fp);
+        }
+
+        char *ra="RA";
+        fwrite(ra,strlen(ra),1,fp);
+        fwrite("\n",sizeof(char),1,fp);
+
+        char* flag="ERICWU";
+        for(map<string,list<string>*>::iterator it2=relAtts->begin();it2!=relAtts->end();++it2)
+        {
+            fwrite(it2->first.c_str(),strlen(it2->first.c_str()),1,fp);
+            fwrite("\n",sizeof(char),1,fp);
+            for(list<string>::iterator it22=it2->second->begin();it22!=it2->second->end();++it22)
+            {
+                fwrite((*it22).c_str(),strlen((*it22).c_str()),1,fp);
+                fwrite("\n",sizeof(char),1,fp);
+            }
+            fwrite(flag,strlen(flag),1,fp);
+            fwrite("\n",sizeof(char),1,fp);
+        }
+
+        char *an="AN";
+        fwrite(an,strlen(an),1,fp);
+        fwrite("\n",sizeof(char),1,fp);
+
+        for(map<string,double>::iterator it3=attNumDis->begin();it3!=attNumDis->end();++it3)
+        {
+            fwrite(it3->first.c_str(),strlen(it3->first.c_str()),1,fp);
+            fwrite("\n",sizeof(char),1,fp);
+            fwrite(&(it3->second),sizeof(double),1,fp);
+            fwrite("\n",sizeof(char),1,fp);
+        }
+
+        char *ar="AR";
+        fwrite(ar,strlen(ar),1,fp);
+        fwrite("\n",sizeof(char),1,fp);
+        for(map<string,string>::iterator it4=attRel->begin();it4!=attRel->end();++it4)
+        {
+            fwrite(it4->first.c_str(),strlen(it4->first.c_str()),1,fp);
+            fwrite("\n",sizeof(char),1,fp);
+            fwrite(it4->second.c_str(),strlen(it4->second.c_str()),1,fp);
+            fwrite("\n",sizeof(char),1,fp);
+        }
+
+        char *rp="RP";
+        fwrite(rp,strlen(rp),1,fp);
+        fwrite("\n",sizeof(char),1,fp);
+
+        char* flagflag="SilverMoon";
+        for(list<list<string>*>::iterator it5=relPart->begin();it5!=relPart->end();++it5)
+        {
+            for(list<string>::iterator it55=(*it5)->begin();it55!=(*it5)->end();++it55)
+            {
+                fwrite((*it55).c_str(),strlen((*it55).c_str()),1,fp);
+                fwrite("\n",sizeof(char),1,fp);
+            }
+            fwrite(flagflag,strlen(flagflag),1,fp);
+            fwrite("\n",sizeof(char),1,fp);
+        }
+        fclose(fp);
+
+    }else{
+        cout<<"FILE OPEN ERROR"<<endl;
+
+    }
+}

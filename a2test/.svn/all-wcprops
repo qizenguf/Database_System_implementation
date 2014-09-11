@@ -1,0 +1,263 @@
+K 25
+svn:wc:ra_dav:version-url
+V 29
+/svn/!svn/ver/39/trunk/a2test
+END
+.nfs0000000000222cd300003e95
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/16/trunk/a2test/.nfs0000000000222cd300003e95
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/16/trunk/a2test/README
+END
+y.tab.c
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/16/trunk/a2test/y.tab.c
+END
+nation.bin
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/39/trunk/a2test/nation.bin
+END
+a1-test.cc
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/19/trunk/a2test/a1-test.cc
+END
+y.tab.h
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/16/trunk/a2test/y.tab.h
+END
+File.cc
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/16/trunk/a2test/File.cc
+END
+Parser.y
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/16/trunk/a2test/Parser.y
+END
+test.h
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/39/trunk/a2test/test.h
+END
+orders.bin
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/39/trunk/a2test/orders.bin
+END
+a1test.out
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/39/trunk/a2test/a1test.out
+END
+customer.bin
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/39/trunk/a2test/customer.bin
+END
+Lexer.l
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/16/trunk/a2test/Lexer.l
+END
+DBFile.cc
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/28/trunk/a2test/DBFile.cc
+END
+TwoWayList.cc
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/16/trunk/a2test/TwoWayList.cc
+END
+TwoWayList.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/16/trunk/a2test/TwoWayList.h
+END
+part.bin
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/39/trunk/a2test/part.bin
+END
+Pipe.cc
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/16/trunk/a2test/Pipe.cc
+END
+.project
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/16/trunk/a2test/.project
+END
+test.out
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/39/trunk/a2test/test.out
+END
+region.bin
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/39/trunk/a2test/region.bin
+END
+Comparison.cc
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/16/trunk/a2test/Comparison.cc
+END
+Comparison.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/16/trunk/a2test/Comparison.h
+END
+Record.cc
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/16/trunk/a2test/Record.cc
+END
+test.cc
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/19/trunk/a2test/test.cc
+END
+Record.h
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/16/trunk/a2test/Record.h
+END
+File.h
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/16/trunk/a2test/File.h
+END
+BigQ.cc
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/39/trunk/a2test/BigQ.cc
+END
+Defs.h
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/16/trunk/a2test/Defs.h
+END
+BigQ.h
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/39/trunk/a2test/BigQ.h
+END
+lex.yy.c
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/16/trunk/a2test/lex.yy.c
+END
+catalog
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/16/trunk/a2test/catalog
+END
+DBFile.h
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/16/trunk/a2test/DBFile.h
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/16/trunk/a2test/Makefile
+END
+lineitem.bin
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/39/trunk/a2test/lineitem.bin
+END
+ParseTree.h
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/16/trunk/a2test/ParseTree.h
+END
+Pipe.h
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/16/trunk/a2test/Pipe.h
+END
+ComparisonEngine.cc
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/16/trunk/a2test/ComparisonEngine.cc
+END
+Schema.cc
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/16/trunk/a2test/Schema.cc
+END
+partsupp.bin
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/39/trunk/a2test/partsupp.bin
+END
+ComparisonEngine.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/16/trunk/a2test/ComparisonEngine.h
+END
+Schema.h
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/16/trunk/a2test/Schema.h
+END
+.cproject
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/16/trunk/a2test/.cproject
+END

@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+environment/project/cdt.managedbuild.toolchain.gnu.cygwin.base.1143225753/PATH/delimiter=;
+environment/project/cdt.managedbuild.toolchain.gnu.cygwin.base.1143225753/PATH/operation=replace
+environment/project/cdt.managedbuild.toolchain.gnu.cygwin.base.1143225753/PATH/value=C\:\\cygwin\\bin;C\:\\Program Files\\Common Files\\Microsoft Shared\\Windows Live;C\:\\Program Files (x86)\\Common Files\\Microsoft Shared\\Windows Live;C\:\\Windows\\system32;C\:\\Windows;C\:\\Windows\\System32\\Wbem;C\:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C\:\\Program Files (x86)\\Windows Live\\Shared;C\:\\Program Files\\Microsoft\\Web Platform Installer\\;C\:\\Program Files (x86)\\Microsoft ASP.NET\\ASP.NET Web Pages\\v1.0\\;C\:\\Program Files (x86)\\Windows Kits\\8.0\\Windows Performance Toolkit\\;C\:\\Program Files\\Microsoft SQL Server\\110\\Tools\\Binn\\
+environment/project/cdt.managedbuild.toolchain.gnu.cygwin.base.1143225753/append=true
+environment/project/cdt.managedbuild.toolchain.gnu.cygwin.base.1143225753/appendContributed=true
