@@ -10,6 +10,6 @@ industrial-strength database systems such as Oracle, DB2, and SQL Server functio
 course will be organized around a substantial software development project that will count
 for most of the final class grade. 
 
-In this project, the goal will be to design and implementa single-user database management
+In this project, the goal will be to design and implement a single-user database management
 system that supports a subset of SQL and some basic relational algebra operations (select, 
 project, and join). 
