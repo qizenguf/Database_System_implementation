@@ -1,0 +1,558 @@
+#include "Statistics.h"
+#include <string.h>
+#include <iostream>
+#include <stdlib.h>
+#include <cstdio>
+using namespace std;
+
+Statistics::Statistics()
+{
+
+}
+Statistics::Statistics(Statistics &copyMe)
+{
+	rel_m.insert(copyMe.rel_m.begin(), copyMe.rel_m.end());
+	att_m.insert(copyMe.att_m.begin(), copyMe.att_m.end());
+	att_DisNum.insert(copyMe.att_DisNum.begin(), copyMe.att_DisNum.end());
+
+	for(int i=0; i<copyMe.rel_v.size();i++){
+		rel *oldRel = copyMe.rel_v.at(i);
+		rel *newRel = new rel;
+		newRel->ID = oldRel->ID;
+		newRel->attNum = oldRel->attNum;
+		newRel->numTuples = oldRel->numTuples;
+		newRel->relNum = oldRel->relNum;
+		for (int j = 0; j < oldRel->relNames.size(); j++) {
+			newRel->relNames.push_back(oldRel->relNames.at(j));
+		}
+		for (int k = 0; k < oldRel->attName.size(); k++) {
+			newRel->attName.push_back(oldRel->attName.at(k));
+		}
+		this->rel_v.push_back(newRel);
+	}
+
+}
+Statistics::~Statistics()
+{
+	/*for(vector<rel*>::iterator it=rel_v.begin(); it!=rel_v.end(); ++it){
+		delete &(*it)->attName;
+		delete &(*it)->relNames;
+	}*/
+}
+
+void Statistics::AddRel(char *relName, int numTuples)
+{
+	map<string, int>::const_iterator i = rel_m.find(relName);
+		//int languageIndex = 0;
+		if (i != rel_m.end()) {
+			rel_v.at(i->second)->numTuples = numTuples;
+		} else {
+			rel *temp= new rel;
+			temp->relNames.push_back(relName);
+			temp->numTuples=numTuples;
+			temp->attNum=0;
+			temp->relNum=1;
+			temp->ID=rel_v.size();
+			this->rel_v.push_back(temp);
+			rel_m.insert(pair<string,int>(relName,temp->ID));
+		}
+}
+void Statistics::AddAtt(char *relName, char *attName, int numDistincts)
+{
+	map<string, int>::const_iterator i = rel_m.find(relName);
+	if(numDistincts==-1) numDistincts=rel_v.at(i->second)->numTuples;
+	map<string, int>::iterator i2 = att_DisNum.find(attName);
+	if(i2== att_DisNum.end()){
+	rel_v.at(i->second)->attName.push_back(attName);
+	int t = rel_v.at(i->second)->attNum;
+	rel_v.at(i->second)->attNum = t+1;
+	att_DisNum.insert(pair<string,int>(attName,numDistincts));
+	att_m.insert(pair<string,string>(attName,relName));
+	}
+	else{
+	 	//cout<<attName<<" :" << numDistincts;
+	i2->second = numDistincts;
+	return;
+	}
+
+}
+void Statistics::CopyRel(char *old_Name, char *new_Name)
+{   string oldName(old_Name);
+	//cout<<"a: "<<rel_v.size()<<endl;
+	map<string, int>::const_iterator i = rel_m.find(old_Name);
+	if (i == rel_m.end())  return;
+	map<string, int>::const_iterator i2 = rel_m.find(new_Name);
+	if (i2 != rel_m.end())  return;
+	rel *newRel = new rel;
+	newRel->attNum = rel_v.at(i->second)->attNum;
+	newRel->numTuples = rel_v.at(i->second)->numTuples;
+	vector<string> attName2;
+	//cout<<"size="<<(rel_v.at(i->second)->attName.size())<<endl;
+	for(int t=0;t<(rel_v.at(i->second)->attName.size());t++){
+        string name(new_Name);
+        name +=".";
+        name += (rel_v.at(i->second)->attName.at(t));
+		attName2.push_back(name);
+		//cout<<name<<endl;
+		att_m.insert(pair<string,string>(name,new_Name));
+		att_DisNum.insert(pair<string,int>(name,att_DisNum[rel_v.at(i->second)->attName.at(t)]));
+		//cout<<name<<endl;
+	}
+	newRel->attName = attName2;
+	vector<string> relNames2;
+	relNames2.push_back(new_Name);
+	newRel->relNames = relNames2;
+	//newRel->relNum = rel_v.at(i->second)->relNum;
+	newRel->relNum = 1;
+	newRel->ID=(int)rel_v.size();
+	//cout<<rel_v.size()<<endl;
+	//cout<<new_Name<<(newRel->ID)<<rel_v.size()<<endl;
+	rel_v.push_back(newRel);
+	
+	rel_m.insert(pair<string,int>(new_Name,newRel->ID));
+	//cout<<"copy:"<<new_Name<<endl;
+}
+
+void Statistics::Read(char *fromWhere)
+{   int charsize = 100;
+    FILE *fp;
+    fp=fopen(fromWhere,"r");
+    int ID =0;
+    if(fp)
+    {
+       char sign[charsize];
+       while(fgets(sign,charsize,fp))
+       {
+        if(sign[strlen(sign)-1]=='\n')
+            {
+                sign[strlen(sign)-1]='\0';
+            }
+       if(!strcmp(sign,"RM")) break;
+       }
+
+                int counter=0;
+                char rm[charsize];
+                string name;
+                int number;
+                string last;
+                while(fgets(rm,charsize,fp))
+                {
+                    if(rm[strlen(rm)-1]=='\n')
+                    {
+                        rm[strlen(rm)-1]='\0';
+                    }
+                    if(strcmp(rm,"AM"))
+                    {
+                    	map<string, int>::const_iterator i = rel_m.find(rm);
+                    			//int languageIndex = 0;
+                    			if (i == rel_m.end()) {
+                    				//rel_m.insert(pair<string,int>(rm,ID));
+                    				//cout<<rm<<" to "<<ID<<endl;
+                    				//ID++;
+                    			}
+                    }else break;
+                }
+                    	counter = 0 ;
+                        char am[charsize];
+                        //string name;
+                        string name2;
+                        while(fgets(am,charsize,fp))
+                        {
+                            if(am[strlen(am)-1]=='\n')
+                            {
+                                am[strlen(am)-1]='\0';
+                            }
+                            if(strcmp(am,"AD"))
+                            {
+                            	if(counter==0)
+                                {
+                            	 name=string(am);
+                            	 //cout<<name<<endl;
+                            	 counter=1;
+                            	 }else{
+                            	  name2=string(am);
+                            	//  cout<<name<<";"<<name2<<endl;
+                            	  att_m.insert(pair<string,string>(name,name2));
+                            	  counter=0;
+                            	  }
+                            }else break;
+                        }
+                               counter=0;
+                               // string name;
+                                int num;
+                                char an[charsize];
+                                while(fgets(an,charsize,fp))
+                                {
+                                    if(an[strlen(an)-1]=='\n')
+                                    {
+                                        an[strlen(an)-1]='\0';
+                                    }
+                                    if(strcmp(an,"RV"))
+                                    {
+                                        if(counter==0)
+                                        {
+                                            name=string(an);
+                                            counter=1;
+                                        }else{
+                                            num=atoi(an);
+                                           // cout<<"dm"<<num<<endl;
+                                            att_DisNum.insert(pair<string,int>(name,num));
+                                            counter=0;
+                                        }
+                                    }else break;
+                                }
+                                        //string name2;
+
+                                        char rv[charsize];
+                                        int a1,a2,a3,a4;
+                                        while(fgets(rv,charsize,fp))
+                                        {
+                                        	//vector<string> attName2;
+                                        	rel *newRel = new rel;
+                                        	//vector<string> relNames2;
+                                            if(rv[strlen(rv)-1]=='\n')
+                                            {
+                                                rv[strlen(rv)-1]='\0';
+                                            }
+                                            if(strcmp(rv,"aoge"))
+                                            {
+                                              name=string(rv);
+                                              //relNames2.push_back(name);
+                                              continue;
+                                             }else{
+                                            	 while(fgets(rv,charsize,fp))
+                                            	  {
+                                            	 if(rv[strlen(rv)-1]=='\n')
+                                            	  {
+                                            	  rv[strlen(rv)-1]='\0';
+                                            	  }
+                                            	  if(strcmp(rv,"aoge"))
+                                            	  {
+                                            	   name2=string(rv);
+                                            	  // cout<<name<<" & "<<name2<<endl;
+                                            	   newRel->attName.push_back(name2);
+                                            	  }
+                                            	  else  break;
+                                            	  }
+                                             }
+                                                     // cout<<"here"<<endl;
+                                            		  fscanf(fp,"%d %d %d %d \n",&a1,&a2,&a3,&a4);
+                                            		 // cout<<a1<<a2<<a3<<a4<<endl;
+                                            		  newRel->numTuples=a1;
+                                            		  newRel->attNum =a2;
+                                            		  newRel->relNum = 1;
+                                            		  newRel->ID = rel_v.size();
+                                            		  rel_m.insert(pair<string,int>(name,newRel->ID));
+                                            		 // newRel->attName = attName2;
+                                            		  newRel->relNames.push_back(name);
+                                            		  rel_v.push_back(newRel);
+                                            		 // cout<<"reln="<<rel_v.at(0)->attNames.at(1)<<endl;
+                                        }
+    }
+    else{
+        cout<<"OPEN EMPTY FILE"<<endl;
+        //make the data empty
+    }
+    fclose(fp);
+}
+void Statistics::Write(char *fromWhere)
+{
+    FILE *fp;
+    fp=fopen(fromWhere,"w");
+    if(fp)
+    {
+        char *rm="RM";
+        fwrite(rm,strlen(rm),1,fp);
+        fwrite("\n",sizeof(char),1,fp);
+
+        for(map<string,int>::iterator it1=rel_m.begin();it1!=rel_m.end();++it1)
+        {
+            fwrite(it1->first.c_str(),strlen(it1->first.c_str()),1,fp);
+            fwrite("\n",sizeof(char),1,fp);
+        }
+
+        char *am="AM";
+        fwrite(am,strlen(am),1,fp);
+        fwrite("\n",sizeof(char),1,fp);
+
+
+        for(map<string,string>::iterator it2=att_m.begin();it2!=att_m.end();++it2)
+        {
+            fwrite(it2->first.c_str(),strlen(it2->first.c_str()),1,fp);
+            fwrite("\n",sizeof(char),1,fp);
+            fwrite(it2->second.c_str(),strlen(it2->second.c_str()),1,fp);
+            fwrite("\n",sizeof(char),1,fp);
+        }
+
+        char *ad="AD";
+        fwrite(ad,strlen(ad),1,fp);
+        fwrite("\n",sizeof(char),1,fp);
+
+        for(map<string,int>::iterator it3=att_DisNum.begin();it3!=att_DisNum.end();++it3)
+        {
+            fwrite(it3->first.c_str(),strlen(it3->first.c_str()),1,fp);
+            fwrite("\n",sizeof(char),1,fp);
+            fprintf(fp,"%d",(it3->second));
+            fwrite("\n",sizeof(char),1,fp);
+        }
+
+        char *rv = "RV";
+        char *flag = "aoge";
+        fwrite(rv,strlen(rv),1,fp);
+        fwrite("\n",sizeof(char),1,fp);
+        for(vector<rel*>::iterator it4=rel_v.begin(); it4!=rel_v.end(); ++it4)
+        {
+        		fwrite((*it4)->relNames[0].c_str(),strlen((*it4)->relNames[0].c_str()),1,fp);
+        		fwrite("\n",sizeof(char),1,fp);
+
+            fwrite(flag,strlen(flag),1,fp);
+            fwrite("\n",sizeof(char),1,fp);
+
+            for(vector<string>::iterator it5= (*it4)->attName.begin();it5!=(*it4)->attName.end();++it5)
+             {
+            	fwrite((*it5).c_str(),strlen((*it5).c_str()),1,fp);
+                fwrite("\n",sizeof(char),1,fp);
+             }
+            fwrite(flag,strlen(flag),1,fp);
+            fwrite("\n",sizeof(char),1,fp);
+           // cout<<"aiyo"<<((*it4)->numTuples)<<endl;
+            int n=(*it4)->numTuples;
+            fprintf(fp,"%d %d %d %d \n",n,((*it4)->attNum),((*it4)->relNum),((*it4)->ID));
+        }
+            fclose(fp);
+
+    }else{
+        cout<<"FILE OPEN ERROR"<<endl;
+
+    }
+}
+
+void  Statistics::Apply(struct AndList *parseTree, char *relNames[], int numToJoin)
+{
+		double estimation(Estimate(parseTree,relNames,numToJoin));
+
+	    int tuple_num(0);
+	    if(estimation < 100000000)
+	    {
+	        tuple_num = (int)(estimation + 0.5f);
+	    }
+
+	    for (int whichAnd = 0; 1; whichAnd++, parseTree = parseTree->rightAnd)
+        {
+        if (parseTree == NULL)
+        {
+			return;
+		}
+		struct OrList *myOr = parseTree->left;
+		for (int whichOr = 0; 1; whichOr++, myOr = myOr->rightOr)
+		{
+		    if (myOr == NULL)
+		    {
+		        break;
+		    }
+		    if(myOr->left->left->code==NAME && myOr->left->right->code==NAME)
+		    {  int ID_R = rel_m.find(att_m.find(myOr->left->right->value)->second)->second;
+		       int ID_L = rel_m.find(att_m.find(myOr->left->left->value)->second)->second;
+		      //  cout<<" R ="<<ID_R<<" ;   L="<<ID_L<<endl;
+		       //ID_L should be the small one
+				if(ID_L > ID_R){
+				   ID_L=ID_R+ID_L;
+				   ID_R = ID_L-ID_R;
+				   ID_L= ID_L-ID_R;
+				}
+				for(int i=0;i<rel_v.at(ID_R)->relNum;i++){
+				 rel_v.at(ID_L)->relNames.push_back(rel_v.at(ID_R)->relNames.at(i));
+				 rel_m[rel_v.at(ID_R)->relNames.at(i)] = ID_L;
+				}
+				/*for(int i=0;i<rel_v.at(ID_R)->attNum;i++){
+				rel_v.at(ID_L)->attName.push_back(rel_v.at(ID_R)->attName.at(i));
+				}	*/
+				//rel_v.at(ID_L)->attNum += rel_v.at(ID_R)->attNum;
+				rel_v.at(ID_L)->relNum += rel_v.at(ID_R)->relNum;
+				rel_v.at(ID_L)->numTuples = tuple_num;
+		    }
+		    if(myOr->left->left->code==NAME && myOr->left->right->code!=NAME)
+		    {
+		        //change num of Dis
+		    }
+
+		}
+    }
+    return;
+
+}
+double Statistics::Estimate(struct AndList *parseTree, char **relNames, int numToJoin)
+{
+	double num_tup = 0.0 ;
+	double and_sel = 1.0;
+	double or_sel = 1.0;
+	string preName("0000000");
+	double preOr = 0.0;
+//	if(!CheckParseError(parseTree,relNames,numToJoin)){
+//		cout<<"parse error"<<endl;
+//		exit(0);
+//	}
+//	int relN=CheckRelError(relNames,numToJoin);
+//	if(relN == 0){
+//	    cout<<"relation error"<<endl;
+//		exit(0);
+//	}
+	//cout<<"rel0"<<rel_v.at(0)->relNum<<endl;
+	//if ( numToJoin == 1 || relN==1 ) num_tup = rel_v.at(rel_m.find(relNames[0])->second)->numTuples;
+	num_tup = rel_v.at(rel_m.find(relNames[0])->second)->numTuples;
+	for (int whichAnd = 0; 1; whichAnd++, parseTree = parseTree->rightAnd)
+        {
+        if (parseTree == NULL)
+        {
+			break ;
+		}
+		struct OrList *myOr = parseTree->left;
+		for (int whichOr = 0; 1; whichOr++, myOr = myOr->rightOr)
+		{
+		    if (myOr == NULL)
+		    {
+		        break;
+		    }
+		    if(myOr->left->left->code==NAME && myOr->left->right->code==NAME)
+		    {  // cout<<"R ="<<myOr->left->right->value<<endl;
+		       // cout<<"L ="<<myOr->left->left->value<<endl;
+				int ID_R = rel_m.find(att_m.find(myOr->left->right->value)->second)->second;
+				//cout<<myOr->left->left->value<<att_m.find(myOr->left->left->value)->second<<endl;
+		        int ID_L = rel_m.find(att_m.find(myOr->left->left->value)->second)->second;
+		      // cout<<myOr->left->right->value<<"R ="<<ID_R<<" L="<<ID_L<<myOr->left->left->value<<endl;
+
+		      // cout<<"R ="<<ID_R<<" L="<<ID_L<<endl;
+		       //ID_L should be the small one
+		       int nd_R = att_DisNum.find(myOr->left->right->value)->second;
+		       int nd_L = att_DisNum.find(myOr->left->left->value)->second;
+		       if (nd_R > nd_L) nd_L = nd_R;
+		       num_tup = ((rel_v.at(ID_R)->numTuples)/(double)nd_L)*(rel_v.at(ID_L)->numTuples);
+		     //  cout<<num_tup<<"res:"<<nd_L<<endl;
+		      // cout<<(rel_v.at(ID_R)->numTuples)<<(rel_v.at(ID_L)->numTuples)<<endl;
+
+		    }
+		    if(myOr->left->left->code==NAME && myOr->left->right->code!=NAME)
+		    {   string curName(myOr->left->left->value);
+		       // cout<<myOr->left->left->value<<":"<<endl;
+                if(curName.compare(preName)!=0){
+                    or_sel = or_sel*(1-preOr);
+                    //preOr = 0.0;
+		        if(myOr->left->code == 3) {
+					preOr =(1.0/att_DisNum.find(myOr->left->left->value)->second);
+				}
+		        else preOr = (1.0/3.0);
+                }
+                else{
+                if(myOr->left->code == 3) {
+					preOr +=(1.0/att_DisNum.find(myOr->left->left->value)->second);
+				}
+		        else preOr += (1.0/3.0);
+                }
+		       // cout<<"dN : "<<att_DisNum.find(myOr->left->left->value)->second<<endl;
+		       // cout<<"dN2 : "<<att_DisNum.find("l_returnflag")->second<<endl;
+		       preName=curName;
+		    }
+
+		}
+		or_sel = or_sel*(1-preOr);
+		//cout<<"or_sel  "<<or_sel<<endl;
+		if(or_sel ==1.0 ) or_sel =0.0;
+		and_sel = and_sel * (1.0-or_sel);
+		or_sel =1.0;
+		preOr = 0.0;
+		preName = "0000000";
+    }
+ //  cout<<and_sel<<" nT:"<<num_tup<<endl;
+    return (num_tup * and_sel);
+}
+
+bool Statistics::CheckParseError(struct AndList *parseTree,char *relNames[],int numToJoin)
+{
+    for (int whichAnd = 0; 1; whichAnd++, parseTree = parseTree->rightAnd)
+    {
+        if (parseTree == NULL)
+        {
+			return true;
+		}
+		struct OrList *myOr = parseTree->left;
+		for (int whichOr = 0; 1; whichOr++, myOr = myOr->rightOr)
+		{
+		    if (myOr == NULL)
+		    {
+		        break;
+		    }
+		    if(myOr->left->left->code==NAME && myOr->left->code == 3)
+		    {
+		        int found=0;
+		        for(int i=0;i<numToJoin;++i)
+		        {
+		        	//cout<<myOr->left->left->value<<relNames[i]<<"."<<endl;
+		        	//cout<<(att_m.find(myOr->left->left->value)->second.c_str())<<endl;
+ 				map<string,string>::iterator it = att_m.find(myOr->left->left->value);
+ 				if(it == att_m.end()) return false;
+				//cout<<it->second<<" ? "<<relNames[i]<<"."<<endl;
+		        	//cout<<att_m.find("s_suppkey")->second<<endl;
+		            if(!strcmp(it->second.c_str(),relNames[i]))
+		            {
+
+		                found=1;
+		                break;
+		            }else{
+		                continue;
+		            }
+		        }
+		        if(found==0)
+		        {
+		            return false;
+		        }
+
+		    }
+		    if(myOr->left->right->code==NAME && myOr->left->code == 3)
+		    {
+		        int found=0;
+		        for(int i=0;i<numToJoin;++i)
+		        {  
+				map<string,string>::iterator it = att_m.find(myOr->left->right->value);
+ 				if(it == att_m.end()) return false;
+				 //cout<<(att_m.find(myOr->left->right->value)->second.c_str())<<relNames[i]<<"."<<endl;
+		            if(!strcmp(it->second.c_str(),relNames[i]))
+		            {
+		                found=1;
+		                break;
+		            }else{
+		                continue;
+		            }
+		        }
+		        if(found==0)
+		        {
+		            return false;
+		        }
+		    }
+		   // return true;
+		}
+    }
+    return true;
+}
+int Statistics::CheckRelError(char *relNames[],int numToJoin){
+	int *check= new int[rel_v.size()];
+	for(int i=0;i<rel_v.size();i++){
+		check[i]=0;
+	}
+	int relNum =0;
+//	cout<<check[1]<<endl;
+	for(int i=0;i<numToJoin;i++){
+		//cout<<rel_m.find(relNames[i])->second<<endl;
+		check[rel_m.find(relNames[i])->second]++;
+		//cout<<check[0]<<endl;
+	}
+
+    for(int i=0;i<rel_v.size();i++){
+    	//cout<<rel_v.at(i)->relNum<<" : "<<check[i]<<endl;
+    	if(check[i]>0 && (rel_v.at(i)->relNum-check[i])<=0) relNum++;
+    	else if(check[i]>0 && (rel_v.at(i)->relNum-check[i])>0) return 0;
+    }
+delete []check;
+return relNum;
+}
+
+
